@@ -6,6 +6,8 @@
       template:
         src: ./motd.j2
         dest: /home/fmercier/motd
+        owner: root
+        group: root
         mode: '0644'
 
     - name: Afficher le contenu du motd
