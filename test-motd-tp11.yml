@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Créer le fichier motd à partir du template
+      template:
+        src: templates/motd.j2
+        dest: /etc/motd
+        mode: '0644'
+
+    - name: Afficher le contenu du motd
+      command: cat /etc/motd
+      register: motd_content
+
+    - name: Afficher le contenu du motd dans la sortie Ansible
+      debug:
+        msg: "{{ motd_content.stdout }}"
+...
