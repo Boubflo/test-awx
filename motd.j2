@@ -1,0 +1,27 @@
+Bienvenue sur le serveur {{ ansible_hostname }} TP11-AWX
+Groupes: {{ group_names | join(', ') }}
+OS: {{ ansible_distribution }}
+Version: {{ ansible_distribution_version }}
+Noyau: {{ ansible_kernel }}
+Gestionnaire de paquets: {{ ansible_pkg_mgr }}
+Gestionnaire de services: {{ ansible_service_mgr }}
+
+Liste DNS:
+{% if ansible_dns and ansible_dns.nameservers %}
+{% for dns in ansible_dns.nameservers %}
+  - {{ dns }}
+{% endfor %}
+{% else %}
+  - {{ lookup('file', '/etc/resolv.conf') | regex_findall('nameserver\s+(\S+)') | join(', ') }}
+{% endif %}
+
+Interfaces réseau:
+{% for iface in ansible_interfaces %}
+    - {{ iface }} : {{ ansible_facts[iface].ipv4.address }}
+{% endfor %}
+
+
+Partitions disques:
+{% for part in ansible_mounts %}
+  - {{ part.device }} {{ (part.size_total / (1024 ** 3)) | round(2) }}G (Utilisé: {{ (part.block_used * part.block_size / (1024 ** 3)) | round(2) }}G, Disponible: {{ (part.size_available / (1024 ** 3)) | round(2) }}G)
+{% endfor %}
