@@ -4,7 +4,7 @@
   tasks:
     - name: Créer le fichier motd à partir du template
       template:
-        src: templates/motd.j2
+        src: ./motd.j2
         dest: /etc/motd
         mode: '0644'
 
